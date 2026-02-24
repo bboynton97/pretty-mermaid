@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pretty Mermaid - Beautiful Diagram Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" data-theme="modern">
+    <header class="header">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+        <h1>Pretty Mermaid</h1>
+      </div>
+      <div class="controls">
+        <div class="theme-select">
+          <label for="theme">Theme:</label>
+          <select id="theme">
+            <option value="modern">Modern</option>
+            <option value="minimal">Minimal</option>
+            <option value="dark">Dark</option>
+            <option value="pastel">Pastel</option>
+            <option value="corporate">Corporate</option>
+          </select>
+        </div>
+        <div class="export-buttons">
+          <button id="export-png" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            PNG
+          </button>
+          <button id="export-svg" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            SVG
+          </button>
+          <button id="copy-svg" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+            Copy SVG
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="panel editor-panel">
+        <div class="panel-header">
+          <h2>Mermaid Code</h2>
+        </div>
+        <textarea id="editor" spellcheck="false" placeholder="Enter your Mermaid diagram code here..."></textarea>
+        <div id="error-display" class="error-display" hidden></div>
+      </div>
+
+      <div class="panel preview-panel">
+        <div class="panel-header">
+          <h2>Preview</h2>
+        </div>
+        <div id="preview" class="preview-content">
+          <div class="mermaid"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Made with ♥ for beautiful diagrams</p>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" hidden>Copied to clipboard!</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

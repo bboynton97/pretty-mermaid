@@ -1,0 +1,607 @@
+/* ========================================
+   Pretty Mermaid - Stylesheet
+   Make Mermaid diagrams beautiful
+   ======================================== */
+
+:root {
+  /* Base spacing and sizing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-sm: 13px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 20px;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+/* ========================================
+   Theme: Modern (Default)
+   ======================================== */
+[data-theme="modern"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  --accent-color: #6366f1;
+  --accent-hover: #4f46e5;
+  --error-color: #ef4444;
+  --error-bg: #fef2f2;
+  
+  /* Mermaid overrides */
+  --mermaid-bg: #ffffff;
+  --mermaid-primary: #6366f1;
+  --mermaid-primary-text: #ffffff;
+  --mermaid-secondary: #f1f5f9;
+  --mermaid-secondary-text: #1e293b;
+  --mermaid-tertiary: #e0e7ff;
+  --mermaid-border: #c7d2fe;
+  --mermaid-line: #94a3b8;
+  --mermaid-text: #1e293b;
+}
+
+/* ========================================
+   Theme: Minimal
+   ======================================== */
+[data-theme="minimal"] {
+  --bg-primary: #fafafa;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f5f5f5;
+  --text-primary: #171717;
+  --text-secondary: #525252;
+  --text-muted: #a3a3a3;
+  --border-color: #e5e5e5;
+  --accent-color: #171717;
+  --accent-hover: #404040;
+  --error-color: #dc2626;
+  --error-bg: #fef2f2;
+  
+  --mermaid-bg: #ffffff;
+  --mermaid-primary: #171717;
+  --mermaid-primary-text: #ffffff;
+  --mermaid-secondary: #f5f5f5;
+  --mermaid-secondary-text: #171717;
+  --mermaid-tertiary: #e5e5e5;
+  --mermaid-border: #d4d4d4;
+  --mermaid-line: #737373;
+  --mermaid-text: #171717;
+}
+
+/* ========================================
+   Theme: Dark
+   ======================================== */
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #334155;
+  --accent-color: #818cf8;
+  --accent-hover: #a5b4fc;
+  --error-color: #f87171;
+  --error-bg: #450a0a;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  
+  --mermaid-bg: #1e293b;
+  --mermaid-primary: #818cf8;
+  --mermaid-primary-text: #0f172a;
+  --mermaid-secondary: #334155;
+  --mermaid-secondary-text: #f1f5f9;
+  --mermaid-tertiary: #475569;
+  --mermaid-border: #64748b;
+  --mermaid-line: #94a3b8;
+  --mermaid-text: #f1f5f9;
+}
+
+/* ========================================
+   Theme: Pastel
+   ======================================== */
+[data-theme="pastel"] {
+  --bg-primary: #fdf4ff;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #fce7f3;
+  --text-primary: #701a75;
+  --text-secondary: #a21caf;
+  --text-muted: #d946ef;
+  --border-color: #f5d0fe;
+  --accent-color: #d946ef;
+  --accent-hover: #c026d3;
+  --error-color: #e11d48;
+  --error-bg: #fff1f2;
+  
+  --mermaid-bg: #ffffff;
+  --mermaid-primary: #f0abfc;
+  --mermaid-primary-text: #701a75;
+  --mermaid-secondary: #fbcfe8;
+  --mermaid-secondary-text: #831843;
+  --mermaid-tertiary: #a5f3fc;
+  --mermaid-border: #e879f9;
+  --mermaid-line: #c084fc;
+  --mermaid-text: #701a75;
+}
+
+/* ========================================
+   Theme: Corporate
+   ======================================== */
+[data-theme="corporate"] {
+  --bg-primary: #f0f4f8;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e2e8f0;
+  --text-primary: #1a365d;
+  --text-secondary: #2c5282;
+  --text-muted: #718096;
+  --border-color: #cbd5e0;
+  --accent-color: #2b6cb0;
+  --accent-hover: #2c5282;
+  --error-color: #c53030;
+  --error-bg: #fff5f5;
+  
+  --mermaid-bg: #ffffff;
+  --mermaid-primary: #3182ce;
+  --mermaid-primary-text: #ffffff;
+  --mermaid-secondary: #e2e8f0;
+  --mermaid-secondary-text: #1a365d;
+  --mermaid-tertiary: #bee3f8;
+  --mermaid-border: #90cdf4;
+  --mermaid-line: #4a5568;
+  --mermaid-text: #1a365d;
+}
+
+/* ========================================
+   Reset & Base
+   ======================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   App Layout
+   ======================================== */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+/* ========================================
+   Header
+   ======================================== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--accent-color);
+}
+
+.logo h1 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.theme-select {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.theme-select label {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.theme-select select {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.theme-select select:hover {
+  border-color: var(--accent-color);
+}
+
+.theme-select select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.export-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-color);
+}
+
+/* ========================================
+   Main Content
+   ======================================== */
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+  flex: 1;
+  padding: var(--spacing-md);
+  overflow: hidden;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+}
+
+.panel-header h2 {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+/* ========================================
+   Editor Panel
+   ======================================== */
+.editor-panel {
+  position: relative;
+}
+
+#editor {
+  flex: 1;
+  padding: var(--spacing-md);
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', monospace;
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: none;
+  resize: none;
+}
+
+#editor:focus {
+  outline: none;
+}
+
+#editor::placeholder {
+  color: var(--text-muted);
+}
+
+.error-display {
+  padding: var(--spacing-md);
+  background: var(--error-bg);
+  border-top: 1px solid var(--error-color);
+  color: var(--error-color);
+  font-size: var(--font-size-sm);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+/* ========================================
+   Preview Panel
+   ======================================== */
+.preview-panel {
+  overflow: hidden;
+}
+
+.preview-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  overflow: auto;
+  background: var(--mermaid-bg);
+}
+
+/* ========================================
+   Mermaid Styling Overrides
+   ======================================== */
+.preview-content .mermaid {
+  font-family: var(--font-family) !important;
+}
+
+/* Node styling */
+.preview-content .node rect,
+.preview-content .node circle,
+.preview-content .node ellipse,
+.preview-content .node polygon,
+.preview-content .node path {
+  stroke: var(--mermaid-border) !important;
+  stroke-width: 1.5px !important;
+}
+
+.preview-content .node.default > rect,
+.preview-content .node.default > polygon {
+  fill: var(--mermaid-secondary) !important;
+  rx: 10px !important;
+  ry: 10px !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+}
+
+/* Primary nodes (start, important) */
+.preview-content .node.primary > rect {
+  fill: var(--mermaid-primary) !important;
+}
+
+.preview-content .node.primary .nodeLabel {
+  color: var(--mermaid-primary-text) !important;
+}
+
+/* Labels */
+.preview-content .nodeLabel,
+.preview-content .label {
+  font-family: var(--font-family) !important;
+  color: var(--mermaid-text) !important;
+  font-weight: 500 !important;
+}
+
+/* Edges/Lines */
+.preview-content .edgePath .path,
+.preview-content .flowchart-link {
+  stroke: var(--mermaid-line) !important;
+  stroke-width: 1.5px !important;
+}
+
+.preview-content .edgeLabel {
+  background-color: var(--mermaid-bg) !important;
+  font-family: var(--font-family) !important;
+  font-size: var(--font-size-sm) !important;
+}
+
+/* Arrowheads */
+.preview-content .marker {
+  fill: var(--mermaid-line) !important;
+  stroke: var(--mermaid-line) !important;
+}
+
+/* Clusters/Subgraphs */
+.preview-content .cluster rect {
+  fill: var(--mermaid-tertiary) !important;
+  stroke: var(--mermaid-border) !important;
+  rx: 8px !important;
+  ry: 8px !important;
+}
+
+.preview-content .cluster .nodeLabel {
+  color: var(--mermaid-text) !important;
+}
+
+/* Sequence diagrams */
+.preview-content .actor {
+  fill: var(--mermaid-secondary) !important;
+  stroke: var(--mermaid-border) !important;
+}
+
+.preview-content text.actor > tspan {
+  font-family: var(--font-family) !important;
+  fill: var(--mermaid-text) !important;
+}
+
+.preview-content .messageLine0,
+.preview-content .messageLine1 {
+  stroke: var(--mermaid-line) !important;
+}
+
+.preview-content .messageText {
+  font-family: var(--font-family) !important;
+  fill: var(--mermaid-text) !important;
+}
+
+/* Class diagrams */
+.preview-content .classGroup .title {
+  fill: var(--mermaid-text) !important;
+  font-family: var(--font-family) !important;
+}
+
+.preview-content .classGroup rect {
+  fill: var(--mermaid-secondary) !important;
+  stroke: var(--mermaid-border) !important;
+}
+
+/* ========================================
+   Footer
+   ======================================== */
+.footer {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+/* ========================================
+   Toast Notification
+   ======================================== */
+.toast {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transition: all var(--transition-base);
+  z-index: 100;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+  
+  .controls {
+    flex-direction: column;
+    width: 100%;
+    gap: var(--spacing-md);
+  }
+  
+  .export-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .main {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+/* ========================================
+   Scrollbar Styling
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
