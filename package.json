@@ -1,0 +1,11 @@
+{
+  "name": "pretty-mermaid",
+  "version": "1.0.0",
+  "description": "Make Mermaid diagrams actually look good",
+  "scripts": {
+    "start": "npx serve src -l $PORT"
+  },
+  "keywords": ["mermaid", "diagram", "styling", "charts"],
+  "author": "Braelyn Boynton",
+  "license": "MIT"
+}

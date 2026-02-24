@@ -17,7 +17,21 @@ MermaidChart wants $$ for themes. This is the free alternative.
 - Vanilla JS (no framework bloat)
 - Mermaid.js for rendering
 - CSS custom properties for theming
-- Hosted on Vercel/Netlify
+- Hosted on Railway
+
+## Local Development
+```bash
+# Just open in browser
+open src/index.html
+
+# Or serve locally
+python3 -m http.server -d src 8080
+```
+
+## Deploy to Railway
+```bash
+railway up
+```
 
 ## License
 MIT
