@@ -21,16 +21,6 @@
         <h1>Pretty Mermaid</h1>
       </div>
       <div class="controls">
-        <div class="theme-select">
-          <label for="theme">Theme:</label>
-          <select id="theme">
-            <option value="modern">Modern</option>
-            <option value="minimal">Minimal</option>
-            <option value="dark">Dark</option>
-            <option value="pastel">Pastel</option>
-            <option value="corporate">Corporate</option>
-          </select>
-        </div>
         <div class="export-buttons">
           <button id="export-png" class="btn btn-secondary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -54,6 +44,13 @@
               <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
             </svg>
             Copy SVG
+          </button>
+          <button id="toggle-theme-panel" class="btn btn-secondary" title="Customize diagram style">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+            </svg>
+            Style
           </button>
         </div>
       </div>
@@ -81,6 +78,88 @@
     <footer class="footer">
       <p>Made with ♥ for beautiful diagrams</p>
     </footer>
+
+    <aside id="theme-panel" class="theme-panel" hidden>
+      <div class="theme-panel-header">
+        <h3>Diagram Style</h3>
+        <button id="close-theme-panel" class="theme-panel-close" title="Close">&times;</button>
+      </div>
+      <div class="theme-panel-body">
+        <section class="theme-section">
+          <h4>Preset Theme</h4>
+          <select id="theme-preset">
+            <option value="modern">Modern</option>
+            <option value="minimal">Minimal</option>
+            <option value="dark">Dark</option>
+            <option value="pastel">Pastel</option>
+            <option value="corporate">Corporate</option>
+          </select>
+        </section>
+
+        <section class="theme-section">
+          <h4>Colors</h4>
+          <div class="theme-field">
+            <label for="custom-primary-fill">Primary fill</label>
+            <input type="color" id="custom-primary-fill" value="#6366f1">
+          </div>
+          <div class="theme-field">
+            <label for="custom-secondary-fill">Secondary fill</label>
+            <input type="color" id="custom-secondary-fill" value="#f1f5f9">
+          </div>
+          <div class="theme-field">
+            <label for="custom-border-color">Border / stroke</label>
+            <input type="color" id="custom-border-color" value="#c7d2fe">
+          </div>
+          <div class="theme-field">
+            <label for="custom-edge-color">Edge / arrow</label>
+            <input type="color" id="custom-edge-color" value="#94a3b8">
+          </div>
+          <div class="theme-field">
+            <label for="custom-text-color">Text</label>
+            <input type="color" id="custom-text-color" value="#1e293b">
+          </div>
+        </section>
+
+        <section class="theme-section">
+          <h4>Border Radius</h4>
+          <div class="theme-field theme-field-range">
+            <input type="range" id="custom-border-radius" min="0" max="20" value="10">
+            <span id="border-radius-value" class="range-value">10px</span>
+          </div>
+        </section>
+
+        <section class="theme-section">
+          <h4>Font Family</h4>
+          <select id="custom-font">
+            <option value="Inter, system-ui, sans-serif">Inter (Default)</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="'Courier New', monospace">Courier New</option>
+            <option value="Arial, Helvetica, sans-serif">Arial</option>
+            <option value="'Segoe UI', Tahoma, sans-serif">Segoe UI</option>
+            <option value="Verdana, Geneva, sans-serif">Verdana</option>
+          </select>
+        </section>
+
+        <section class="theme-section">
+          <h4>Node Spacing</h4>
+          <div class="theme-field theme-field-range">
+            <input type="range" id="custom-node-spacing" min="20" max="100" value="50">
+            <span id="node-spacing-value" class="range-value">50</span>
+          </div>
+        </section>
+
+        <section class="theme-section">
+          <h4>Edge Style</h4>
+          <select id="custom-edge-style">
+            <option value="basis">Curved (Default)</option>
+            <option value="linear">Straight</option>
+            <option value="stepBefore">Step</option>
+          </select>
+        </section>
+
+        <button id="reset-custom-theme" class="btn btn-secondary theme-reset-btn">Reset to Preset Defaults</button>
+      </div>
+    </aside>
   </div>
 
   <div id="toast" class="toast" hidden>Copied to clipboard!</div>

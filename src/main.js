@@ -11,8 +11,32 @@ const CONFIG = {
   DEBOUNCE_MS: 400,
   STORAGE_KEY_THEME: 'pretty-mermaid-theme',
   STORAGE_KEY_CODE: 'pretty-mermaid-code',
+  STORAGE_KEY_CUSTOM: 'pretty-mermaid-custom-theme',
   TOAST_DURATION_MS: 2500,
 };
+
+const PRESET_COLORS = {
+  modern:    { primaryFill: '#6366f1', secondaryFill: '#f1f5f9', borderColor: '#c7d2fe', edgeColor: '#94a3b8', textColor: '#1e293b' },
+  minimal:   { primaryFill: '#171717', secondaryFill: '#f5f5f5', borderColor: '#d4d4d4', edgeColor: '#737373', textColor: '#171717' },
+  dark:      { primaryFill: '#818cf8', secondaryFill: '#334155', borderColor: '#64748b', edgeColor: '#94a3b8', textColor: '#f1f5f9' },
+  pastel:    { primaryFill: '#f0abfc', secondaryFill: '#fbcfe8', borderColor: '#e879f9', edgeColor: '#c084fc', textColor: '#701a75' },
+  corporate: { primaryFill: '#3182ce', secondaryFill: '#e2e8f0', borderColor: '#90cdf4', edgeColor: '#4a5568', textColor: '#1a365d' },
+};
+
+function getDefaultCustomTheme(preset) {
+  const colors = PRESET_COLORS[preset] || PRESET_COLORS.modern;
+  return {
+    primaryFill: colors.primaryFill,
+    secondaryFill: colors.secondaryFill,
+    borderColor: colors.borderColor,
+    edgeColor: colors.edgeColor,
+    textColor: colors.textColor,
+    borderRadius: 10,
+    font: 'Inter, system-ui, sans-serif',
+    nodeSpacing: 50,
+    edgeStyle: 'basis',
+  };
+}
 
 const DEFAULT_DIAGRAM = `flowchart TD
     A[📦 Start Project] --> B{Choose Framework?}
@@ -47,12 +71,28 @@ const elements = {
   editor: document.getElementById('editor'),
   preview: document.getElementById('preview'),
   mermaidContainer: document.querySelector('.mermaid'),
-  themeSelect: document.getElementById('theme'),
   exportPng: document.getElementById('export-png'),
   exportSvg: document.getElementById('export-svg'),
   copySvg: document.getElementById('copy-svg'),
   errorDisplay: document.getElementById('error-display'),
   toast: document.getElementById('toast'),
+  // Theme panel
+  toggleThemePanel: document.getElementById('toggle-theme-panel'),
+  themePanel: document.getElementById('theme-panel'),
+  closeThemePanel: document.getElementById('close-theme-panel'),
+  themePreset: document.getElementById('theme-preset'),
+  customPrimaryFill: document.getElementById('custom-primary-fill'),
+  customSecondaryFill: document.getElementById('custom-secondary-fill'),
+  customBorderColor: document.getElementById('custom-border-color'),
+  customEdgeColor: document.getElementById('custom-edge-color'),
+  customTextColor: document.getElementById('custom-text-color'),
+  customBorderRadius: document.getElementById('custom-border-radius'),
+  borderRadiusValue: document.getElementById('border-radius-value'),
+  customFont: document.getElementById('custom-font'),
+  customNodeSpacing: document.getElementById('custom-node-spacing'),
+  nodeSpacingValue: document.getElementById('node-spacing-value'),
+  customEdgeStyle: document.getElementById('custom-edge-style'),
+  resetCustomTheme: document.getElementById('reset-custom-theme'),
 };
 
 // ========================================
@@ -61,6 +101,7 @@ const elements = {
 
 let currentDiagramId = 0;
 let debounceTimer = null;
+let customTheme = null;
 
 // ========================================
 // Mermaid Configuration
@@ -76,22 +117,25 @@ function getMermaidConfig(theme) {
     corporate: 'default',
   };
 
+  const ct = customTheme || getDefaultCustomTheme(theme);
+  const spacing = ct.nodeSpacing;
+
   return {
     startOnLoad: false,
     theme: themeMap[theme] || 'default',
     securityLevel: 'loose',
-    fontFamily: 'Inter, system-ui, sans-serif',
+    fontFamily: ct.font,
     flowchart: {
       htmlLabels: true,
-      curve: 'basis',
+      curve: ct.edgeStyle,
       padding: 20,
-      nodeSpacing: 50,
-      rankSpacing: 50,
+      nodeSpacing: spacing,
+      rankSpacing: spacing,
     },
     sequence: {
       diagramMarginX: 20,
       diagramMarginY: 20,
-      actorMargin: 50,
+      actorMargin: spacing,
       boxMargin: 10,
     },
   };
@@ -105,7 +149,12 @@ function init() {
   // Load saved theme
   const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEY_THEME) || 'modern';
   setTheme(savedTheme);
-  elements.themeSelect.value = savedTheme;
+  elements.themePreset.value = savedTheme;
+
+  // Load saved custom overrides or init from preset
+  const savedCustom = localStorage.getItem(CONFIG.STORAGE_KEY_CUSTOM);
+  customTheme = savedCustom ? JSON.parse(savedCustom) : getDefaultCustomTheme(savedTheme);
+  populatePanel(customTheme);
 
   // Load saved code or use default
   const savedCode = localStorage.getItem(CONFIG.STORAGE_KEY_CODE);
@@ -135,15 +184,73 @@ function setupEventListeners() {
     }, CONFIG.DEBOUNCE_MS);
   });
 
-  // Theme change
-  elements.themeSelect.addEventListener('change', (e) => {
+  // Theme panel toggle
+  elements.toggleThemePanel.addEventListener('click', toggleThemePanel);
+  elements.closeThemePanel.addEventListener('click', toggleThemePanel);
+
+  // Preset theme change
+  elements.themePreset.addEventListener('change', (e) => {
     const theme = e.target.value;
     setTheme(theme);
     localStorage.setItem(CONFIG.STORAGE_KEY_THEME, theme);
-    
-    // Re-initialize mermaid with new theme and re-render
+    // Reset custom overrides to match preset
+    customTheme = getDefaultCustomTheme(theme);
+    populatePanel(customTheme);
+    saveCustomTheme();
     mermaid.initialize(getMermaidConfig(theme));
     renderDiagram();
+  });
+
+  // Color pickers
+  const colorInputs = [
+    { el: elements.customPrimaryFill, key: 'primaryFill' },
+    { el: elements.customSecondaryFill, key: 'secondaryFill' },
+    { el: elements.customBorderColor, key: 'borderColor' },
+    { el: elements.customEdgeColor, key: 'edgeColor' },
+    { el: elements.customTextColor, key: 'textColor' },
+  ];
+  colorInputs.forEach(({ el, key }) => {
+    el.addEventListener('input', (e) => {
+      customTheme[key] = e.target.value;
+      applyCustomThemeAndRender();
+    });
+  });
+
+  // Border radius slider
+  elements.customBorderRadius.addEventListener('input', (e) => {
+    customTheme.borderRadius = parseInt(e.target.value, 10);
+    elements.borderRadiusValue.textContent = customTheme.borderRadius + 'px';
+    applyCustomThemeAndRender();
+  });
+
+  // Font selector
+  elements.customFont.addEventListener('change', (e) => {
+    customTheme.font = e.target.value;
+    applyCustomThemeAndRender();
+  });
+
+  // Node spacing slider
+  elements.customNodeSpacing.addEventListener('input', (e) => {
+    customTheme.nodeSpacing = parseInt(e.target.value, 10);
+    elements.nodeSpacingValue.textContent = customTheme.nodeSpacing;
+    applyCustomThemeAndRender();
+  });
+
+  // Edge style selector
+  elements.customEdgeStyle.addEventListener('change', (e) => {
+    customTheme.edgeStyle = e.target.value;
+    applyCustomThemeAndRender();
+  });
+
+  // Reset button
+  elements.resetCustomTheme.addEventListener('click', () => {
+    const preset = elements.themePreset.value;
+    customTheme = getDefaultCustomTheme(preset);
+    populatePanel(customTheme);
+    saveCustomTheme();
+    mermaid.initialize(getMermaidConfig(preset));
+    renderDiagram();
+    showToast('Reset to preset defaults');
   });
 
   // Export buttons
@@ -158,11 +265,16 @@ function setupEventListeners() {
       e.preventDefault();
       showToast('Auto-saved!');
     }
-    
+
     // Ctrl/Cmd + Shift + C to copy SVG
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
       e.preventDefault();
       copySvgToClipboard();
+    }
+
+    // Escape to close theme panel
+    if (e.key === 'Escape' && elements.themePanel.classList.contains('open')) {
+      toggleThemePanel();
     }
   });
 }
@@ -173,6 +285,45 @@ function setupEventListeners() {
 
 function setTheme(theme) {
   elements.app.setAttribute('data-theme', theme);
+}
+
+function toggleThemePanel() {
+  const isOpen = elements.themePanel.classList.toggle('open');
+  elements.themePanel.hidden = false;
+  elements.app.classList.toggle('panel-open', isOpen);
+  if (!isOpen) {
+    // Allow transition to finish before hiding
+    setTimeout(() => {
+      if (!elements.themePanel.classList.contains('open')) {
+        elements.themePanel.hidden = true;
+      }
+    }, 300);
+  }
+}
+
+function populatePanel(ct) {
+  elements.customPrimaryFill.value = ct.primaryFill;
+  elements.customSecondaryFill.value = ct.secondaryFill;
+  elements.customBorderColor.value = ct.borderColor;
+  elements.customEdgeColor.value = ct.edgeColor;
+  elements.customTextColor.value = ct.textColor;
+  elements.customBorderRadius.value = ct.borderRadius;
+  elements.borderRadiusValue.textContent = ct.borderRadius + 'px';
+  elements.customFont.value = ct.font;
+  elements.customNodeSpacing.value = ct.nodeSpacing;
+  elements.nodeSpacingValue.textContent = ct.nodeSpacing;
+  elements.customEdgeStyle.value = ct.edgeStyle;
+}
+
+function saveCustomTheme() {
+  localStorage.setItem(CONFIG.STORAGE_KEY_CUSTOM, JSON.stringify(customTheme));
+}
+
+function applyCustomThemeAndRender() {
+  saveCustomTheme();
+  const theme = elements.themePreset.value;
+  mermaid.initialize(getMermaidConfig(theme));
+  renderDiagram();
 }
 
 // ========================================
@@ -212,14 +363,46 @@ function styleSvg() {
   const svg = elements.mermaidContainer.querySelector('svg');
   if (!svg) return;
 
+  const ct = customTheme || getDefaultCustomTheme('modern');
+  const r = ct.borderRadius;
+
   // Make SVG responsive
   svg.style.maxWidth = '100%';
   svg.style.height = 'auto';
 
-  // Add rounded corners to nodes via inline styles (more reliable)
+  // Apply custom border radius to nodes
   svg.querySelectorAll('.node rect').forEach(rect => {
-    rect.setAttribute('rx', '10');
-    rect.setAttribute('ry', '10');
+    rect.setAttribute('rx', String(r));
+    rect.setAttribute('ry', String(r));
+  });
+
+  // Apply custom colors to nodes
+  svg.querySelectorAll('.node rect, .node circle, .node ellipse, .node polygon').forEach(shape => {
+    shape.setAttribute('stroke', ct.borderColor);
+  });
+
+  // Default/secondary node fills
+  svg.querySelectorAll('.node.default > rect, .node.default > polygon').forEach(shape => {
+    shape.setAttribute('fill', ct.secondaryFill);
+  });
+
+  // Labels / text
+  svg.querySelectorAll('.nodeLabel, .label, .edgeLabel span').forEach(label => {
+    label.style.color = ct.textColor;
+  });
+  svg.querySelectorAll('text').forEach(t => {
+    t.setAttribute('fill', ct.textColor);
+  });
+
+  // Edges
+  svg.querySelectorAll('.edgePath .path, .flowchart-link').forEach(path => {
+    path.setAttribute('stroke', ct.edgeColor);
+  });
+
+  // Arrowheads
+  svg.querySelectorAll('marker path, .marker').forEach(m => {
+    m.setAttribute('fill', ct.edgeColor);
+    m.setAttribute('stroke', ct.edgeColor);
   });
 
   // Add subtle shadows (via filter if supported)
