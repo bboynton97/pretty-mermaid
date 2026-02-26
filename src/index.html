@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app" data-theme="modern">
+  <div class="app panel-open" data-theme="modern">
     <header class="header">
       <div class="logo">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -68,6 +68,12 @@
       <div class="panel preview-panel">
         <div class="panel-header">
           <h2>Preview</h2>
+          <div class="zoom-controls">
+            <button id="zoom-in" class="zoom-btn" title="Zoom in">+</button>
+            <span id="zoom-level" class="zoom-level">100%</span>
+            <button id="zoom-out" class="zoom-btn" title="Zoom out">&minus;</button>
+            <button id="zoom-reset" class="zoom-btn" title="Reset zoom">&#x27F2;</button>
+          </div>
         </div>
         <div id="preview" class="preview-content">
           <div class="mermaid"></div>
@@ -79,7 +85,7 @@
       <p>Made with ♥ for beautiful diagrams</p>
     </footer>
 
-    <aside id="theme-panel" class="theme-panel" hidden>
+    <aside id="theme-panel" class="theme-panel open">
       <div class="theme-panel-header">
         <h3>Diagram Style</h3>
         <button id="close-theme-panel" class="theme-panel-close" title="Close">&times;</button>

@@ -93,6 +93,11 @@ const elements = {
   nodeSpacingValue: document.getElementById('node-spacing-value'),
   customEdgeStyle: document.getElementById('custom-edge-style'),
   resetCustomTheme: document.getElementById('reset-custom-theme'),
+  // Zoom controls
+  zoomIn: document.getElementById('zoom-in'),
+  zoomOut: document.getElementById('zoom-out'),
+  zoomReset: document.getElementById('zoom-reset'),
+  zoomLevel: document.getElementById('zoom-level'),
 };
 
 // ========================================
@@ -102,6 +107,14 @@ const elements = {
 let currentDiagramId = 0;
 let debounceTimer = null;
 let customTheme = null;
+
+// Zoom & pan state
+let zoomLevel = 1;
+let panX = 0;
+let panY = 0;
+let isPanning = false;
+let panStartX = 0;
+let panStartY = 0;
 
 // ========================================
 // Mermaid Configuration
@@ -253,6 +266,45 @@ function setupEventListeners() {
     showToast('Reset to preset defaults');
   });
 
+  // Zoom controls
+  elements.zoomIn.addEventListener('click', () => {
+    zoomLevel = Math.min(zoomLevel * 1.25, 5);
+    updateZoomTransform();
+  });
+  elements.zoomOut.addEventListener('click', () => {
+    zoomLevel = Math.max(zoomLevel / 1.25, 0.1);
+    updateZoomTransform();
+  });
+  elements.zoomReset.addEventListener('click', resetZoom);
+
+  // Scroll-to-zoom on preview
+  elements.preview.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+    zoomLevel = Math.min(Math.max(zoomLevel * factor, 0.1), 5);
+    updateZoomTransform();
+  }, { passive: false });
+
+  // Click-drag panning on preview
+  elements.preview.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return;
+    isPanning = true;
+    panStartX = e.clientX - panX;
+    panStartY = e.clientY - panY;
+    elements.preview.classList.add('panning');
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (!isPanning) return;
+    panX = e.clientX - panStartX;
+    panY = e.clientY - panStartY;
+    updateZoomTransform();
+  });
+  document.addEventListener('mouseup', () => {
+    if (!isPanning) return;
+    isPanning = false;
+    elements.preview.classList.remove('panning');
+  });
+
   // Export buttons
   elements.exportPng.addEventListener('click', exportAsPng);
   elements.exportSvg.addEventListener('click', exportAsSvg);
@@ -327,6 +379,22 @@ function applyCustomThemeAndRender() {
 }
 
 // ========================================
+// Zoom & Pan
+// ========================================
+
+function updateZoomTransform() {
+  elements.mermaidContainer.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+  elements.zoomLevel.textContent = Math.round(zoomLevel * 100) + '%';
+}
+
+function resetZoom() {
+  zoomLevel = 1;
+  panX = 0;
+  panY = 0;
+  updateZoomTransform();
+}
+
+// ========================================
 // Diagram Rendering
 // ========================================
 
@@ -354,6 +422,9 @@ async function renderDiagram() {
 
     // Apply additional styling to the rendered SVG
     styleSvg();
+
+    // Reapply current zoom/pan transform
+    updateZoomTransform();
   } catch (error) {
     showError(error.message || 'Invalid Mermaid syntax');
   }
